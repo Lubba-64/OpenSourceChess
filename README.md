@@ -7,7 +7,7 @@ This is my first full JS project, and took about a week and a half to make the i
 this is also a side project, and will likely be discontinued after the to do list below is done.     
          
 **Hosted Here:**     
-https://lubba-64.github.io/JSChess/     
+https://lubba-64.github.io/OpenSourceChess/      
       
 **TO-DO:**      
 Better UI stuff      
