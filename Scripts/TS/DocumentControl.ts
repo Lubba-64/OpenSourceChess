@@ -1,12 +1,15 @@
+let capturesUIIsActive = true;
 document.onmousemove = function(e){ 
-    var x = e.clientX; 
-    var y = e.clientY; 
-    var w = window.innerWidth;
-    var h = window.innerHeight;
     var mouse = document.getElementById('HeldPieceIMG')!;
-    mouse.style.marginLeft = (clampNumber(x,0,w-200))+"px";
-    mouse.style.marginTop = (clampNumber(y,0,h-200))+"px";
+    var limitfactor = 0.9;
+    var MousePos = new Vector2(clampNumber(e.clientX,0,window.innerWidth*limitfactor),clampNumber(e.clientY,0,window.innerHeight*limitfactor));
+    mouse.style.marginLeft = (MousePos.x)+"px";
+    mouse.style.marginTop = (MousePos.y)+"px";
 }
+window.onresize = function() {
+    RefreshPlacementCSS(new Vector2(window.innerWidth,window.innerHeight));
+};
+
 function DrawBoardHTML(){
     let element = document.getElementById("boardContainerMain")!;
 `    $(".boardContainer").on( {
@@ -76,4 +79,8 @@ function AddPieceToPromotionOptionsContainer(piece: Piece){
 function ResetPromotionOptionsContainer(){
     let element = document.getElementById("promotionOptionsContainer")!;
     element.innerHTML = "";
+}
+function SetCapturesActive(active: boolean){
+    let element = document.getElementById("leftSideBar")!;
+    element.setAttribute("style",active ? "" : "display: none;");
 }

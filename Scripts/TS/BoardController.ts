@@ -8,11 +8,13 @@ enum BoardRestrictionType{
 }
 class Board{
     // x, y
+    boardSize: number;
     boardRestrictions: Vector2[][][];
     board: Piece[][];
     RestrictionType: BoardRestrictionType;
     Held: Piece;
     constructor(){
+        this.boardSize = 8;
         this.boardRestrictions = [];
         for (let x = 0; x < 8; x++){
             this.boardRestrictions.push([])

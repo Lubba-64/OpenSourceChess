@@ -25,7 +25,7 @@
                   <p class="overlayText size1">Checkmate!</p>
                   <p class="overlayText size2" id="WinnerTXT">White Won!</p>
                 </div>
-                <button class="restartButton" onclick="Game.Start()"><p class="overlayText size3">New Game</p></button>
+                <button class="restartButton" onclick="Game.Start()"><p class="overlayText" style="font-size: 10px;">New Game</p></button>
               </div>
             </div>
             <!-- promotion display -->
@@ -47,12 +47,12 @@
       <div class="boardContainer" id="boardContainerMain">
       </div>
       <!-- the left sidebar containing captures and other UI elements -->
-      <div class="leftSideBar">
+      <div class="leftSideBar" id="leftSideBar">
         <div class="capturetextContainer">
-          <p class="captureTitle">Captures:</p>
+          <p class="captureTitle size1">Captures:</p>
         </div>
-        <div class="capturedPiecesWhite" id="capturedPiecesWhite"></div>
-        <div class="capturedPiecesBlack" id="capturedPiecesBlack"></div>
+        <div class="capturedPieces cell1" id="capturedPiecesWhite"></div>
+        <div class="capturedPieces cell2" id="capturedPiecesBlack"></div>
       </div>
     </div>
 
@@ -64,6 +64,7 @@
     <script src="Scripts/JS/DocumentControl.js" type="text/javascript"></script>
     <script src="Scripts/JS/ChessPieces.js" type="text/javascript"></script>
     <script src="Scripts/JS/BoardController.js" type="text/javascript"></script>
+    <script src="Scripts/JS/CSSController.js" type="text/javascript"></script>
     <script src="Scripts/JS/Init.js" type="text/javascript"></script>
     <style id="DynamicStyle">
     </style>

@@ -10,6 +10,7 @@ var BoardRestrictionType;
 })(BoardRestrictionType || (BoardRestrictionType = {}));
 class Board {
     constructor() {
+        this.boardSize = 8;
         this.boardRestrictions = [];
         for (let x = 0; x < 8; x++) {
             this.boardRestrictions.push([]);
@@ -426,7 +427,6 @@ function CheckForPiecePromotions() {
             let color = y * 7 == 0;
             if (piece.IsWhite == color) {
                 if (piece.Type == PieceType.Pawn) {
-                    console.log("a");
                     promotedpos = pos;
                     EnablePromotionUI(color);
                     Game.SetPause(true);
