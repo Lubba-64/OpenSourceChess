@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Eagle+Lake&display=swap');
+
+/* classes for the page itself */
+.pageBG{
+    background-color: #1a2021;
+}
+/* contains all the page elements */
+.pageElementContainer{
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    height: 900px;
+    display: flex;
+}
+
+/* game board classes */
+.button{
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 100px;
+    float: left;
+    -webkit-user-select: none;
+    user-select: none;
+}
+/* different colors for the different cells on the board during different states */
+.cell1{background-color: #bd8f8c;}
+.cell2{background-color: #f7e0c1;}
+.cellAttacked{background-color: #ff7b3d;}
+.cellMove{background-color: #8cf9ff;}
+.cellBoth{background-color: red;}
+.cell{ background-color: white;}
+.rowContainer{
+    overflow: auto;
+}
+.boardContainer{
+    width: 900px;
+    height: 900px;
+    overflow: auto;
+    position: relative;
+    background-color:  #1a2021;
+}
+.pieceIMG{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px;
+    height: 80px;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+/* mouse image */
+.mouseIMG{
+    width: 80px;
+    height: 80px;
+    z-index: 1;
+    position: absolute;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* captured pieces vars */
+.leftSideBar{
+    width: 200px;
+    height: 800px;
+    background-color:#415052;
+    float: left;
+    margin-left: 30px;
+    border-radius: 20px;
+}
+.capturedPiecesWhite{
+    width: 100px;
+    height: 600px;
+    float: left;
+    background-color: #bd8f8c;
+}
+.capturedPiecesBlack{
+    width: 100px;
+    height: 600px;
+    float: left;
+    background-color: #f7e0c1;
+}
+.pieceIMGMini{
+    margin-left: auto;
+    margin-right: auto;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.captureTitle{
+    font-family: 'Eagle Lake';
+    font-size: 32px;
+    margin: 10px;
+    color: white;
+}
+/* vars for the coordinate plane text */
+.coordinateText{
+    font-family: 'Eagle Lake';
+    font-size: 20px;
+    margin: 5px;
+    color: white;
+}
+.coordinateTextContainer{
+    width: 100px;
+    height: 100px;
+    float: left;
+    -webkit-user-select: none;
+    user-select: none;
+}
+/* all board overlay elements and classes are contained here */
+.boardOverlay{
+    width: 800px;
+    height: 800px;
+    filter: blur(5px);
+    background-color: #1a2021;
+    position: fixed;
+    opacity: 0.9;
+}
+.boardOverlayContainer{
+    width: 800px;
+    height: 800px;
+    position: fixed;
+    z-index: 10;
+}
+.overlayContainer{
+    width: 800px;
+    height: 150px;
+    position: fixed;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+}
+.overlayText{
+    color: white;
+    font-family: 'Eagle Lake';
+    text-align: center;
+    margin: auto;
+}
+.size1{font-size: 30px;}
+.size2{font-size: 20px;}
+.size3{font-size: 13px;}
+.verticallycenterDIV{
+    display: flex;
+    align-items: center;
+    height: 800px;
+}
+/* checkmate overlay classes */
+.restartButton{
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 40px;
+    float: left;
+    background-color: #415052;
+    border-radius: 15px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.restartButton:hover{
+    background-color: #738588;
+}
+.restartButton:active{
+    background-color: #a5b8bb;
+}
+.checkmateDiv{
+    text-align: center; 
+    padding: 10px;
+}
+/* piece promotion classes */
+.promotionButtonContainer{
+    overflow: auto;
+    background-color: #1a2021;
+    border-radius: 15px;
+    z-index: 20;
+}
+.promotionButton{
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 100px;
+    float: left;
+    background-color: #687a7c;
+    border-radius: 15px;
+    -webkit-user-select: none;
+    user-select: none;
+    margin: 5px;
+    z-index: 20;
+}
+.promotionButton:hover{
+    background-color: #a2b6b9;
+}
+.promotionButton:active{
+    background-color: #d7eaec;
+}

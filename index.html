@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="simple, open source, multiplayer/singleplayer chess">
+    <title>chess!!!</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+  </head>
+  <body class="pageBG">
+    <!-- mouse image overlay -->
+    <img src="img/none.png" alt="!" id="HeldPieceIMG" class="mouseIMG">
+
+    <!-- contains all elements surrounding the board -->
+    <div class="pageElementContainer">
+      <!-- board overlay -->
+      <div class="boardOverlayContainer" id="boardOverlayContainer" style="display: none;">
+        <div class="overlayContainer">
+          <div class="verticallycenterDIV">
+            <!-- checkmate display -->
+            <div id="CheckmateDiv" style="display: none;">
+              <div style="justify-content: center; display: flex; align-items: center;">
+                <div class="checkmateDiv">
+                  <p class="overlayText size1">Checkmate!</p>
+                  <p class="overlayText size2" id="WinnerTXT">White Won!</p>
+                </div>
+                <button class="restartButton" onclick="Game.Start()"><p class="overlayText size3">New Game</p></button>
+              </div>
+            </div>
+            <!-- promotion display -->
+            <div id="promotionDiv" style="display: none;">
+              <div style="justify-content: center; display: flex; align-items: center;">
+                <p class="overlayText size1">Promote To:</p>
+                <!-- the container for the promotion options -->
+                <div class="promotionButtonContainer" id="promotionOptionsContainer">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>   
+        <!-- the actual background for the board overlay -->
+        <div class="boardOverlay"></div>
+      </div>
+      
+      <!-- all of the non overlay elements, such as the sidebar, and the target for board rendering -->
+      <div class="boardContainer" id="boardContainerMain">
+      </div>
+      <!-- the left sidebar containing captures and other UI elements -->
+      <div class="leftSideBar">
+        <div class="capturetextContainer">
+          <p class="captureTitle">Captures:</p>
+        </div>
+        <div class="capturedPiecesWhite" id="capturedPiecesWhite"></div>
+        <div class="capturedPiecesBlack" id="capturedPiecesBlack"></div>
+      </div>
+    </div>
+
+
+    <!-- Script Inserts (compiled from typescript) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="Scripts/JS/Math.js" type="text/javascript"></script>
+    <script src="Scripts/JS/Vector.js" type="text/javascript"></script>
+    <script src="Scripts/JS/DocumentControl.js" type="text/javascript"></script>
+    <script src="Scripts/JS/ChessPieces.js" type="text/javascript"></script>
+    <script src="Scripts/JS/BoardController.js" type="text/javascript"></script>
+    <script src="Scripts/JS/Init.js" type="text/javascript"></script>
+    <style id="DynamicStyle">
+    </style>
+  </body>
+</html>

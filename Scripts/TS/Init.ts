@@ -1,0 +1,2 @@
+DrawBoardHTML();
+Game.Start();

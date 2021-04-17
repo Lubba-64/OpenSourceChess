@@ -1,0 +1,25 @@
+{
+  "name": "jschess",
+  "version": "1.0.0",
+  "description": "my own bare bones - open source implementation of chess built with JS, HTML, and CSS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lubba-64/JSChess.git"
+  },
+  "author": "Benjamin Hines",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lubba-64/JSChess/issues"
+  },
+  "homepage": "https://github.com/Lubba-64/JSChess#readme",
+  "devDependencies": {
+    "@types/jquery": "^3.5.5"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}
