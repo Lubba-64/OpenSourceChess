@@ -1,0 +1,28 @@
+the reason I am writing up a separate file for this is purely because
+I don't want to shove the readme with useless info only the person wanting
+to contribute to the repo will want to know
+
+so first up this project is completely, fully finished now. I will not return to add to this repo
+
+I encourage someone to Co-opt this code and use it for commercial purpose. that means it would have a nice home.
+
+I commented all the code I could so that you can get an easier grasp on whats doing what although I could have
+been more descriptive with how it all works, especially the board manager.
+
+some things to note / do that I didn't if you want this to be more viable:
+
+    change how piece moves work. special moves use "args" for special movement actions (castling, en passant). 
+    something that would work better would be to return a list of positions to set to specific pieces:
+    EX: set x,y to rook, and set that to a none tile. 
+
+    add castling please, I decided not to add it because I needed to move onto other projects:
+    https://youtu.be/4jXQyGaeUV8
+
+    add the ability for pieces to be pinned if they are preventing a check. 
+    (if they move they will put the king in check which is illegal)
+    its not hard to do i just had to move on
+
+    better UI scaling method for the chess board. the CSSContoller.ts BS is stupid. redo the UI scaling.
+
+    other than that its fully functioning, with there being a likelyhood of more unseen bugs :/
+    oh well time to move on. to new projects I go!

@@ -1,4 +1,6 @@
+// the FEN string for the starting position for the chess board.
 const startingfen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+// some global game vars.
 let currentValidPositions: Vector2[];
 let currentPieceOriginalPos: Vector2;
 let promotedpos: Vector2;
@@ -6,13 +8,14 @@ enum BoardRestrictionType{
     Free,
     Closed
 }
+// the class that contains all of the board logic, plus the stored state of the board.
 class Board{
-    // x, y
     boardSize: number;
     boardRestrictions: Vector2[][][];
     board: Piece[][];
     RestrictionType: BoardRestrictionType;
     Held: Piece;
+    // initializes the board and restrictions with empty cells, and other vars.
     constructor(){
         this.boardSize = 8;
         this.boardRestrictions = [];
@@ -32,18 +35,21 @@ class Board{
         this.RestrictionType = BoardRestrictionType.Free;
         this.Held = None;
     }
+    // adds a movement restiction to a specific piece.
     AddRestriction (torestrict: Vector2,position: Vector2): void{
         this.RestrictionType = BoardRestrictionType.Closed;
         if (this.IsInBounds(torestrict)){
             this.boardRestrictions[torestrict.x][torestrict.y].push(position);
         }
     }
+    // gets the restriction for that piece
     GetRestriction (vec: Vector2): Vector2[]{
         if (this.IsInBounds(vec)){
             return this.boardRestrictions[vec.x][vec.y];
         }
         return [];
     }
+    // clears all restrictions
     ClearRestrictions (): void{
         this.RestrictionType = BoardRestrictionType.Free;
         for (let x = 0; x < 8; x++){
@@ -52,13 +58,16 @@ class Board{
             }
         }
     }
+    // gets a piece for a specific position
     Get (vec: Vector2): Piece{
         return this.board[vec.x][vec.y];
     }
+    // sets the piece at a specific position and updates the board HTML with the piece image
     Set (vec: Vector2,piece: Piece): void{
         this.board[vec.x][vec.y] = piece;
         document.getElementById(`Pieceimg:(${vec.x},${vec.y})`)!.setAttribute('src',piece.Path);
     }
+    // same as get for the board except with the held piece.
     GetHeld (): Piece{
         return this.Held;
     }
@@ -66,26 +75,27 @@ class Board{
         this.Held = piece;
         document.getElementById(`HeldPieceIMG`)!.setAttribute('src',piece.Path);
     }
+    // is a position within the board?
     IsInBounds (vec: Vector2): boolean{
         return (((vec.x > -1) && (vec.x < 8))&& ((vec.y > -1) && (vec.y < 8)));
     }
-    SetBoardSquareColor (vec: Vector2,cssclass: string){
+    // sets the color of a cell on the board
+    SetBoardCellColor (vec: Vector2,cssclass: string){
         document.getElementById(`GridCell:(${vec.x},${vec.y})`)!.setAttribute('class',cssclass);
     }
-    ResetBoardSquareColor (vec: Vector2){
-        let z = (vec.x % 2) + 1;
-        if (vec.y % 2 == 0){
-            z = z == 2 ? 1 : 2;   
-        }
-        document.getElementById(`GridCell:(${vec.x},${vec.y})`)!.setAttribute('class',`button cell${z}`);
+    // resets a boards cell color to its default state
+    ResetBoardCellColor (vec: Vector2){
+        document.getElementById(`GridCell:(${vec.x},${vec.y})`)!.setAttribute('class',`button cell${GetOriginalCellColor(vec)}`);
     }
-    ResetBoardSquareColorAll (){
+    // resets all of the board's cell colors to their default states.
+    ResetBoardCellColorAll (){
         for (let x = 0; x < 8; x++){
             for (let y = 0; y < 8; y++){
-                this.ResetBoardSquareColor(new Vector2(x,y));
+                this.ResetBoardCellColor(new Vector2(x,y));
             }
         }
     }
+    // clears the entire board.
     Clear (){
         for (let x = 0; x < 8; x++){
             for (let y = 0; y < 8; y++){
@@ -110,6 +120,7 @@ let Game = {
             this.INITIALIZED = true;
         }
     },
+    // starts the game and resets all of the gamestate
     Start: function() : void{
         this.turn = true;
         this.SetPause(false);
@@ -119,12 +130,13 @@ let Game = {
         DisableOverlayUI();
         ResetCaptures();
     },
+    // do cleanup after a player has moved
     CompleteTurn: function(positions : Vector2[]) : void{
         if (this.board.RestrictionType == BoardRestrictionType.Closed){
             this.board.ClearRestrictions();
         }
         positions.forEach(pos => {
-            this.board.ResetBoardSquareColor(pos);
+            this.board.ResetBoardCellColor(pos);
         });
         this.turn = !this.turn;
         let checked = CheckForPiecePromotions();
@@ -133,6 +145,7 @@ let Game = {
         }
         UpdateCheckStatus();
     },
+    // enable the game over UI
     GameOver: function(color: boolean){
         Game.SetPause(true);
         EnableCheckmateUI(!color);
@@ -141,7 +154,7 @@ let Game = {
         this.IsPaused = bool;
     }
 }
-
+// gets a piece object from a fen string
 function GetPieceFromFen(fen : string) : Piece{
     let Piece = None;
     pieces.forEach(piece => {
@@ -151,6 +164,7 @@ function GetPieceFromFen(fen : string) : Piece{
     });
     return Piece;
 }
+// gets a piece object from its associatedc image path
 function GetPieceFromPath(path: string) : Piece{
     let Piece = None;
     pieces.forEach(piece => {
@@ -160,6 +174,7 @@ function GetPieceFromPath(path: string) : Piece{
     });
     return Piece;
 }
+// parses and displays a fen string on the gameboard.
 function ParseAndDisplayFen(fen : string) : void{
     fen = fen.replace(/\//g,"")
     let skip = 0;
@@ -185,20 +200,23 @@ function ParseAndDisplayFen(fen : string) : void{
         }
     }
 }
+// transfers a piece to a specific position, when the player clicks on a cell.
 function TransferPiece(x:number,y:number){
     if (!Game.IsPaused){
         let vec = new Vector2(x,y);
+        // if the position to move was the position the piece started in, reset the piece.
         if (currentPieceOriginalPos != undefined){
             if (vec.Equal(currentPieceOriginalPos)){
                 Game.board.Set(vec,Game.board.GetHeld());
                 Game.board.SetHeld(None);
                 currentValidPositions.forEach(pos => {
-                    Game.board.ResetBoardSquareColor(pos);
+                    Game.board.ResetBoardCellColor(pos);
                 });
                 currentPieceOriginalPos = Vector2.downLeft;
                 return;
             }
         }
+
         if (Game.board.GetHeld() != None){
             let held = Game.board.GetHeld();
             let isValidPos = false;
@@ -245,43 +263,60 @@ function TransferPiece(x:number,y:number){
             }
         }
         else{
+            // if the player isn't holding anything and this cell isn't empty, add it to the player's hand and record the valid movement positions 
+            // (if there are any, if not it wont be picked up)
             let potentialPickedPiece = Game.board.Get(vec);
             if (Game.board.RestrictionType != BoardRestrictionType.Closed){
                 if (potentialPickedPiece != None){
                     if (!Vector2.downLeft.Contains(Game.board.boardRestrictions[x][y])){
                         if (potentialPickedPiece.IsCurrentlyMoving()){
-                            Game.board.ResetBoardSquareColorAll();
+                            Game.board.ResetBoardCellColorAll();
                             Game.board.Set(vec,None);
                             Game.board.SetHeld(potentialPickedPiece);
                             currentPieceOriginalPos = vec;
                             currentValidPositions = potentialPickedPiece.GetPositions(vec,PosArgs.empty(potentialPickedPiece.IsWhite)).filter(pos => Game.board.IsInBounds(pos));
                             currentValidPositions.forEach(pos => {
-                                Game.board.SetBoardSquareColor(pos,"button cellMove");
+                                Game.board.SetBoardCellColor(pos,"button cellMove");
                             });
                             return;
                         }
                     }
                 }
             }
+            // if the board has restrictions it does somethign different because there isn't free movement.
+            // instead take the precalculated valid positions and check and see if this piece can move with those.
             else if (Game.board.GetRestriction(vec).length > 0){
-                Game.board.ResetBoardSquareColorAll();
+                Game.board.ResetBoardCellColorAll();
                 Game.board.Set(vec,None);
                 Game.board.SetHeld(potentialPickedPiece);
                 currentPieceOriginalPos = vec;
                 currentValidPositions = Game.board.GetRestriction(vec);
                 currentValidPositions.forEach(pos => {
-                    Game.board.SetBoardSquareColor(pos,"button cellMove");
+                    Game.board.SetBoardCellColor(pos,"button cellMove");
                 });
                 return;
             }
         }
     }
 }
+// resets a piece to its original position before the player picked it up.
+function ResetPiece(){
+    if (Game.board.GetHeld() != None){
+        Game.board.Set(currentPieceOriginalPos,Game.board.GetHeld());
+        Game.board.SetHeld(None);
+        currentValidPositions.forEach(pos => {
+            Game.board.ResetBoardCellColor(pos);
+        });
+        currentPieceOriginalPos = Vector2.downLeft;
+    }
+}
+// the long and arduous function for checking if a player is in check, or checkmate on any given move.
 function UpdateCheckStatus(){
     let attacked = GetAttackedPositions(!Game.turn);
     let isInCheck = false;
     let checkMate = false;
     let CheckedPos = Vector2.downLeft;
+    // first, detect checkmate by checking the king's position against the list of the attacked enemy positions
     for (let x = 0; x < 8; x++){
         for (let y = 0; y < 8; y++){
             if (CheckedPos != Vector2.downLeft){
@@ -302,18 +337,23 @@ function UpdateCheckStatus(){
         return;
     }
     else{
-        // this is what needs to get fixed
+        // if that passes we're in check. now to restrict the movement of pieces so the player will
+        // be forced to avoid check on their turn if they can (so its legal)
+
+        // initializes the vars for the kingpos, kingmovement, attacks, and blocks
         let king = Game.board.Get(CheckedPos);
         let kingposes = king.GetPositions(CheckedPos,PosArgs.empty(king.IsWhite));
         kingposes.push(CheckedPos);
         let attacked2 = GetAttackedPositionsIndividual(!Game.turn, false);
         let blocked = GetAttackedPositionsIndividual(Game.turn, true);
-        let trimmedattacks: PieceBinding[] = [];
+        let prunedattacks: PieceBinding[] = [];
+
+        // prunes the list of attacks to attacks that threate the king
         for (let x = 0; x < 8; x++){
             attacked2.forEach(piece => {
                 kingposes.forEach(kpos => {
                     let isrepeated = false;
-                    trimmedattacks.forEach(binding =>{
+                    prunedattacks.forEach(binding =>{
                         if (binding.Pos == piece.Pos){
                             isrepeated = true;
                         }
@@ -321,27 +361,29 @@ function UpdateCheckStatus(){
                     if (!isrepeated){
                         piece.Poses.forEach(pos => {
                             if (pos.Equal(kpos)){
-                                trimmedattacks.push(piece);
+                                prunedattacks.push(piece);
                             }
                         });
                     }
                 });
             });
         }
+        // for each attack, check and see if there are any moves the defending can make to block all incoming attacks.
+        // this needs to be case specific because pieces move differently and therefore need different block checks
         let toremove: number[] = [];
-        for (let i = 0; i < trimmedattacks.length; i++){
+        for (let i = 0; i < prunedattacks.length; i++){
             for (let x = 0; x < 8; x++){
                 blocked.forEach(piece => {
                     piece.Poses.forEach(pos => {
-                        if (pos.Equal(trimmedattacks[i].Pos)){
+                        if (pos.Equal(prunedattacks[i].Pos)){
                             Game.board.AddRestriction(piece.Pos,pos);
                             toremove.push(i);
                         }
                     });
                 });
             }
-            if (trimmedattacks[i].Piece.BlockType != BlockType.Capture){
-                let direction = PositionsSelective(trimmedattacks[i].Pos,CheckedPos.Subtract(trimmedattacks[i].Pos).IntNormalize().MultiplyNum(-1),trimmedattacks[i].Piece.IsWhite);
+            if (prunedattacks[i].Piece.BlockType != BlockType.Capture){
+                let direction = PositionsSelective(prunedattacks[i].Pos,CheckedPos.Subtract(prunedattacks[i].Pos).IntNormalize().MultiplyNum(-1),prunedattacks[i].Piece.IsWhite);
                 for (let x = 0; x < 8; x++){
                     blocked.forEach(piece => {
                         if (piece.Piece.Type != PieceType.King){
@@ -358,17 +400,19 @@ function UpdateCheckStatus(){
                 }
             }
         }
+        // if the doubly pruned attacks, through king only interference AND through blocks is more than one, checkmate. otherwise return.
         toremove.forEach(int => {
-            trimmedattacks.splice(int,1);
+            prunedattacks.splice(int,1);
         });
-        checkMate = trimmedattacks.length > 0;
+        checkMate = prunedattacks.length > 0;
         if (checkMate){
             Game.GameOver(king.IsWhite);
             return;
         }
     }
 }
-function GetAttackedPositionsIndividual(color: boolean,includemoves: boolean): PieceBinding[]{
+// gets the attacked positions for each individual piece, because sometimes having an abstracted list of the positions isn't enough
+function GetAttackedPositionsIndividual(color: boolean, includemoves: boolean): PieceBinding[]{
     let AttackedArray: PieceBinding[] = [];
     for (let x = 0; x < 8; x++){
         for (let y = 0; y < 8; y++){
@@ -387,6 +431,7 @@ function GetAttackedPositionsIndividual(color: boolean,includemoves: boolean): P
     }
     return AttackedArray;
 }
+// returns an array of all individually attacked positions on the board.
 function GetAttackedPositions(color: boolean): Vector2[]{
     let AttackedArray: Vector2[] = [];
     for (let x = 0; x < 8; x++){
@@ -416,16 +461,7 @@ function GetAttackedPositions(color: boolean): Vector2[]{
     }
     return AttackedArray;
 }
-function ResetPiece(){
-    if (Game.board.GetHeld() != None){
-        Game.board.Set(currentPieceOriginalPos,Game.board.GetHeld());
-        Game.board.SetHeld(None);
-        currentValidPositions.forEach(pos => {
-            Game.board.ResetBoardSquareColor(pos);
-        });
-        currentPieceOriginalPos = Vector2.downLeft;
-    }
-}
+// checks the board for piece promotions, and if there are any, initiates the ui sequence for promoting that specific piece.
 function CheckForPiecePromotions(): boolean {
     for (let x = 0; x < 8; x++){
         for (let y = 0; y < 2; y++){
@@ -444,6 +480,7 @@ function CheckForPiecePromotions(): boolean {
     }
     return false;
 }
+// signals that the promotion is complete and the gamestate can be restored.
 function CompletePromotion(piecePath: string) {
     DisableOverlayUI();
     Game.board.Set(promotedpos,GetPieceFromPath(piecePath));

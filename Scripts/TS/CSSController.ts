@@ -1,3 +1,6 @@
+// this entire file is for managing the sizing of CSS. this should all be refactored out but hey, its what you do when you HATE the frontend.
+
+
 type numGetter= ()=>number;
 class CSSSizeVar{
     _var:string;
@@ -27,7 +30,6 @@ const miniPieceSizeCSS = new CSSSizeVar("miniPieceSize",()=>{return cellSize-(ce
 const sideBarWidthCSS = new CSSSizeVar("sideBarWidth",()=>{return cellSize*2});
 const capturedPieceColumnHeightCSS = new CSSSizeVar("capturedPieceColumnHeight",()=>{return GetBoardSize()*0.75});
 const sizeVars: CSSSizeVar[] = [boardSizeCSS,cellSizeCSS,pieceSizeCSS,miniPieceMargainCSS,miniPieceSizeCSS,sideBarWidthCSS,capturedPieceColumnHeightCSS];
-
 function RefreshPlacementCSS(windowSize: Vector2){
     let isless = windowSize.x < windowSize.y;
     cellSize = clampNumber((isless ? windowSize.x : windowSize.y) / 10,30,200);

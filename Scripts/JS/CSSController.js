@@ -1,4 +1,5 @@
 "use strict";
+// this entire file is for managing the sizing of CSS. this should all be refactored out but hey, its what you do when you HATE the frontend.
 class CSSSizeVar {
     constructor(_var, value) {
         this._var = `--${_var}`;
